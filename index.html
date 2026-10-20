@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UPFOLL BY DARO - Sweet Coquette Store</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff0f5;
+            color: #4a2e38;
+            background-image: radial-gradient(#fbcfe8 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .coquette-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #f9a8d4;
+            box-shadow: 0 8px 25px rgba(244, 114, 182, 0.15);
+            backdrop-filter: blur(8px);
+        }
+        .glow-btn {
+            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+            transition: all 0.2s ease;
+        }
+        .glow-btn:active {
+            transform: scale(0.98);
+        }
+        select option {
+            font-size: 14px;
+            padding: 8px;
+        }
+        /* Custom Scrollbar for Modal Warning */
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #fbcfe8;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #f43f5e;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-10 flex flex-col items-center justify-start p-3 sm:p-6">
+
+    <!-- Top Announcement Bar -->
+    <div class="w-full max-w-md sm:max-w-xl bg-pink-500 text-white text-[11px] sm:text-xs text-center py-2 px-3 rounded-full font-medium shadow-sm mb-4 sm:mb-6 flex items-center justify-center gap-1.5 leading-tight">
+        <span>❤</span>
+        <span>X UPFOLL CHECKOUT WEB — @DAROAGAIN @DAROLAGI</span>
+        <span>❤</span>
+    </div>
+
+    <!-- Header Section -->
+    <header class="text-center mb-5 sm:mb-6 max-w-md sm:max-w-xl w-full px-2">
+        <h1 class="text-2xl sm:text-4xl font-bold font-serif-title text-pink-600 tracking-wide uppercase leading-tight">
+            UPFOLL BY DARO
+        </h1>
+        <p class="text-pink-400 text-xs sm:text-sm mt-1 italic font-serif-title">
+            ✦ Has Handled 8000+ Orders Since 2025 ✦
+        </p>
+    </header>
+
+    <!-- Main Order Form Container -->
+    <main class="w-full max-w-md sm:max-w-xl coquette-card rounded-2xl sm:rounded-3xl p-4 sm:p-8">
+
+        <form id="orderForm" onsubmit="openModal(event)" class="space-y-4 sm:space-y-6">
+
+            <!-- 1. Kategori Akun -->
+            <div>
+                <label class="block text-pink-700 font-semibold text-xs sm:text-sm mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-ribbon text-pink-500"></i> Pilih Kategori Akun
+                </label>
+                <select id="categorySelect" onchange="updateSubCategories()" class="w-full bg-pink-50/60 border border-pink-300 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-pink-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+                    <option value="">-- Pilih Kategori Akun --</option>
+                    <option value="business">Business Account</option>
+                    <option value="roleplayer">Roleplayer Account</option>
+                    <option value="fan">Fan Account</option>
+                    <option value="cyber">Cyber Account</option>
+                    <option value="personal">Personal Account</option>
+                    <option value="study">Study Twt</option>
+                </select>
+            </div>
+
+            <!-- 2. Rentang Followers Saat Ini -->
+            <div id="subCatContainer" class="hidden">
+                <label class="block text-pink-700 font-semibold text-xs sm:text-sm mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-users text-pink-500"></i> Angka Followersmu Saat Ini
+                </label>
+                <select id="subCatSelect" onchange="updatePackages()" class="w-full bg-pink-50/60 border border-pink-300 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-pink-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+                    <!-- Populated dynamically -->
+                </select>
+            </div>
+
+            <!-- 3. Paket & Tipe Layanan -->
+            <div id="packageContainer" class="hidden">
+                <label class="block text-pink-700 font-semibold text-xs sm:text-sm mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-pink-500"></i> Pilih Jumlah Followers & Tipe
+                </label>
+                <select id="packageSelect" onchange="calculatePrice()" class="w-full bg-pink-50/60 border border-pink-300 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-pink-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+                    <!-- Populated dynamically -->
+                </select>
+            </div>
+
+            <hr class="border-pink-200 my-3 sm:my-4">
+
+            <!-- 4. Jumlah Akun & Link/Username -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                    <label class="block text-pink-700 font-semibold text-xs sm:text-sm mb-1.5 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-pink-500"></i> Berapa Akun?
+                    </label>
+                    <input type="number" id="accountCount" min="1" max="50" value="1" onchange="calculatePrice()" oninput="calculatePrice()" class="w-full bg-pink-50/60 border border-pink-300 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-pink-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+                    <p class="text-[10px] sm:text-[11px] text-pink-400 mt-1">*Harga otomatis dikali jumlah akun</p>
+                </div>
+
+                <div>
+                    <label class="block text-pink-700 font-semibold text-xs sm:text-sm mb-1.5 flex items-center gap-2">
+                        <i class="fa-solid fa-at text-pink-500"></i> Username / Link Akun
+                    </label>
+                    <input type="text" id="usernamesInput" placeholder="Contoh: @user1, @user2" required class="w-full bg-pink-50/60 border border-pink-300 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-pink-900 text-xs sm:text-sm placeholder-pink-300 font-medium focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+                </div>
+            </div>
+
+            <!-- Rincian Total Harga -->
+            <div class="bg-pink-100/70 border border-pink-300 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 flex flex-row justify-between items-center gap-2">
+                <div>
+                    <span class="text-[10px] sm:text-xs text-pink-500 block uppercase font-bold tracking-wider">Total Pembayaran:</span>
+                    <span id="totalPriceDisplay" class="text-xl sm:text-3xl font-bold font-serif-title text-pink-600">Rp 0</span>
+                </div>
+                <div class="text-right text-[11px] sm:text-xs text-pink-500 font-semibold max-w-[50%]" id="priceDetailText">
+                    Silakan pilih paket
+                </div>
+            </div>
+
+            <!-- Tombol Order / Open Modal -->
+            <button type="submit" class="w-full glow-btn text-white font-bold py-3.5 sm:py-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base uppercase tracking-wider">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Checkout & Ringkasan Order
+            </button>
+        </form>
+
+    </main>
+
+    <!-- Modal Order Summary & Warning T&C -->
+    <div id="summaryModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+        <div class="bg-white border-2 border-pink-300 rounded-2xl sm:rounded-3xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] flex flex-col justify-between shadow-2xl relative">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-pink-100">
+                <h3 class="text-lg sm:text-xl font-bold font-serif-title text-pink-600 flex items-center gap-2">
+                    <span>🎀</span> Ringkasan & Catatan Order
+                </h3>
+                <button onclick="closeModal()" class="text-pink-400 hover:text-pink-600 text-xl font-bold px-2">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="overflow-y-auto custom-scroll my-3 pr-1 space-y-4 text-xs sm:text-sm text-pink-900">
+                
+                <!-- Preview Summary Box -->
+                <div class="bg-pink-50 border border-pink-200 rounded-xl p-3 space-y-1.5 text-xs">
+                    <p><strong>Tipe Akun:</strong> <span id="summaryCat">-</span></p>
+                    <p><strong>Username:</strong> <span id="summaryUser">-</span></p>
+                    <p><strong>Folls Saat Ini:</strong> <span id="summarySubCat">-</span></p>
+                    <p><strong>Jumlah Orderan:</strong> <span id="summaryOrder">-</span></p>
+                    <p><strong>Total Harga:</strong> <span id="summaryTotal" class="text-pink-600 font-bold text-sm">-</span></p>
+                </div>
+
+                <!-- Input Password (Optional) -->
+                <div>
+                    <label class="block text-pink-700 font-semibold text-xs mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-key text-pink-500"></i> Password Akun
+                    </label>
+                    <input type="text" id="passwordInput" placeholder="Isi hanya jika fix order (Boleh dikosongkan)" class="w-full bg-pink-50/80 border border-pink-300 rounded-xl px-3 py-2 text-xs text-pink-900 placeholder-pink-300 font-medium focus:outline-none focus:border-pink-500">
+                </div>
+
+                <!-- Warning T&C Box -->
+                <div class="bg-pink-100/50 border border-pink-200 rounded-xl p-3 text-[11px] sm:text-xs leading-relaxed space-y-1.5 text-pink-950">
+                    <p class="font-bold text-pink-600 uppercase tracking-wider mb-1">⚠️ CATATAN & SYARAT KETENTUAN:</p>
+                    <p>✅ Sudah termasuk dimaininkan tipis-tipis & dibersihkan dari non followers</p>
+                    <p>✅ Harga tidak berlaku kelipatan, tapi boleh repeat order (paling cepat 24 jam setelah upfoll terakhir selesai)</p>
+                    <p>✅ Akun yang mau diupfoll harus masuk mt & tidak limit follow</p>
+                    <p>✅ Dalam keadaan ghostban, hanya tipe BA JFB yang bisa diproses dengan max order 100f</p>
+                    <p>✅ Minimal ketaut email aktif</p>
+                    <p>✅ Lock/SB/GB/Suspend = resiko upfoll (tidak terima komplen karena dijoki tidak brutal)</p>
+                    <p>✅ Jika acc kena ghostban di pertengahan upfoll, boleh meminta refund sebanyak kekurangan upfoll (rumus = harga / orderan folls x sisa upfoll)</p>
+                    <p>✅ Jika lagi diupfoll jangan upfoll sendiri/ngetweet berlebihan</p>
+                    <p>✅ JANGAN JUAL AKUN & JANGAN GANTI PASS AKUN SEBELUM DIINFO DONE</p>
+                    <p>✅ No rush</p>
+                    <p>✅ Bonus tidak bisa direquest</p>
+                    <p>✅ Melanggar T&C = kekurangan upfoll tidak bisa diuangkan/dipindah ke akun lain</p>
+                </div>
+
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="pt-2 border-t border-pink-100 flex gap-2">
+                <button onclick="closeModal()" class="w-1/3 bg-pink-100 text-pink-600 font-bold py-3 rounded-xl text-xs uppercase tracking-wider hover:bg-pink-200 transition-all">
+                    Batal
+                </button>
+                <button onclick="sendToWhatsApp()" class="w-2/3 glow-btn text-white font-bold py-3 rounded-xl text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Lanjut ke Whatsapp
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Admin Settings Footer -->
+    <footer class="mt-6 sm:mt-8 text-center text-xs text-pink-400 max-w-md w-full px-2">
+        <p class="mb-2 font-medium text-[11px] sm:text-xs">🌸 UPFOLL BY DARO 🌸</p>
+        <div class="flex items-center justify-center gap-2">
+            <span class="text-[11px]">No. Admin WA:</span>
+            <input type="text" id="adminWaInput" value="6285694447348" class="bg-white border border-pink-300 px-3 py-1 rounded-full text-center text-pink-600 font-semibold w-36 text-xs focus:outline-none">
+        </div>
+    </footer>
+
+    <!-- JavaScript System -->
+    <script>
+        const pricingData = {
+            business: {
+                "0 - 1999F": [
+                    { label: "50f — Rp 1.500 (JFB)", price: 1500, followers: "50f", type: "JFB" },
+                    { label: "50f — Rp 2.500 (Selective)", price: 2500, followers: "50f", type: "Selective" },
+                    { label: "100f — Rp 3.000 (JFB)", price: 3000, followers: "100f", type: "JFB" },
+                    { label: "100f — Rp 5.000 (Selective)", price: 5000, followers: "100f", type: "Selective" },
+                    { label: "150f — Rp 4.500 (JFB)", price: 4500, followers: "150f", type: "JFB" },
+                    { label: "150f — Rp 7.500 (Selective)", price: 7500, followers: "150f", type: "Selective" },
+                    { label: "200f — Rp 6.000 (JFB)", price: 6000, followers: "200f", type: "JFB" },
+                    { label: "200f — Rp 10.000 (Selective)", price: 10000, followers: "200f", type: "Selective" },
+                    { label: "250f — Rp 8.000 (JFB)", price: 8000, followers: "250f", type: "JFB" },
+                    { label: "250f — Rp 13.000 (Selective)", price: 13000, followers: "250f", type: "Selective" },
+                    { label: "300f — Rp 9.600 (JFB)", price: 9600, followers: "300f", type: "JFB" },
+                    { label: "300f — Rp 15.600 (Selective)", price: 15600, followers: "300f", type: "Selective" },
+                    { label: "400f — Rp 13.600 (JFB)", price: 13600, followers: "400f", type: "JFB" },
+                    { label: "400f — Rp 21.600 (Selective)", price: 21600, followers: "400f", type: "Selective" },
+                    { label: "500f — Rp 17.000 (JFB)", price: 17000, followers: "500f", type: "JFB" },
+                    { label: "500f — Rp 27.000 (Selective)", price: 27000, followers: "500f", type: "Selective" }
+                ],
+                "2000 - 9999F": [
+                    { label: "50f — Rp 1.750 (JFB)", price: 1750, followers: "50f", type: "JFB" },
+                    { label: "50f — Rp 2.750 (Selective)", price: 2750, followers: "50f", type: "Selective" },
+                    { label: "100f — Rp 3.500 (JFB)", price: 3500, followers: "100f", type: "JFB" },
+                    { label: "100f — Rp 5.500 (Selective)", price: 5500, followers: "100f", type: "Selective" },
+                    { label: "150f — Rp 5.250 (JFB)", price: 5250, followers: "150f", type: "JFB" },
+                    { label: "150f — Rp 8.250 (Selective)", price: 8250, followers: "150f", type: "Selective" },
+                    { label: "200f — Rp 7.000 (JFB)", price: 7000, followers: "200f", type: "JFB" },
+                    { label: "200f — Rp 11.000 (Selective)", price: 11000, followers: "200f", type: "Selective" },
+                    { label: "250f — Rp 9.250 (JFB)", price: 9250, followers: "250f", type: "JFB" },
+                    { label: "250f — Rp 14.250 (Selective)", price: 14250, followers: "250f", type: "Selective" },
+                    { label: "300f — Rp 11.110 (JFB)", price: 11110, followers: "300f", type: "JFB" },
+                    { label: "300f — Rp 17.100 (Selective)", price: 17100, followers: "300f", type: "Selective" },
+                    { label: "400f — Rp 15.600 (JFB)", price: 15600, followers: "400f", type: "JFB" },
+                    { label: "400f — Rp 23.600 (Selective)", price: 23600, followers: "400f", type: "Selective" },
+                    { label: "500f — Rp 19.500 (JFB)", price: 19500, followers: "500f", type: "JFB" },
+                    { label: "500f — Rp 29.500 (Selective)", price: 29500, followers: "500f", type: "Selective" }
+                ]
+            },
+            roleplayer: {
+                "0 - 1999F": [
+                    { label: "100f — Rp 5.000 (Real RP)", price: 5000, followers: "100f", type: "Real RP" },
+                    { label: "100f — Rp 7.000 (Selfoll)", price: 7000, followers: "100f", type: "Selfoll" },
+                    { label: "150f — Rp 7.500 (Real RP)", price: 7500, followers: "150f", type: "Real RP" },
+                    { label: "150f — Rp 10.500 (Selfoll)", price: 10500, followers: "150f", type: "Selfoll" },
+                    { label: "200f — Rp 10.000 (Real RP)", price: 10000, followers: "200f", type: "Real RP" },
+                    { label: "200f — Rp 14.000 (Selfoll)", price: 14000, followers: "200f", type: "Selfoll" }
+                ],
+                "2000 - 3999F": [
+                    { label: "100f — Rp 7.000 (Real RP)", price: 7000, followers: "100f", type: "Real RP" },
+                    { label: "150f — Rp 10.500 (Real RP)", price: 10500, followers: "150f", type: "Real RP" },
+                    { label: "200f — Rp 14.000 (Real RP)", price: 14000, followers: "200f", type: "Real RP" }
+                ],
+                "4000 - 9999F": [
+                    { label: "100f — Rp 9.000 (Real RP)", price: 9000, followers: "100f", type: "Real RP" },
+                    { label: "150f — Rp 13.500 (Real RP)", price: 13500, followers: "150f", type: "Real RP" },
+                    { label: "200f — Rp 18.000 (Real RP)", price: 18000, followers: "200f", type: "Real RP" }
+                ]
+            },
+            fan: {
+                "0 - 9999F": [
+                    { label: "100f — Rp 7.000", price: 7000, followers: "100f", type: "Standard" }
+                ]
+            },
+            cyber: {
+                "0 - 9999F": [
+                    { label: "100f — Rp 6.000", price: 6000, followers: "100f", type: "Standard" }
+                ]
+            },
+            personal: {
+                "0 - 9999F": [
+                    { label: "100f — Rp 7.000", price: 7000, followers: "100f", type: "Standard" }
+                ]
+            },
+            study: {
+                "0 - 9999F": [
+                    { label: "100f — Rp 6.000", price: 6000, followers: "100f", type: "Standard" }
+                ]
+            }
+        };
+
+        function updateSubCategories() {
+            const cat = document.getElementById("categorySelect").value;
+            const subCatContainer = document.getElementById("subCatContainer");
+            const subCatSelect = document.getElementById("subCatSelect");
+            const packageContainer = document.getElementById("packageContainer");
+
+            subCatSelect.innerHTML = '<option value="">-- Pilih Rentang Followers --</option>';
+            packageContainer.classList.add("hidden");
+
+            if (cat && pricingData[cat]) {
+                const subCats = Object.keys(pricingData[cat]);
+                subCats.forEach(sub => {
+                    const opt = document.createElement("option");
+                    opt.value = sub;
+                    opt.textContent = `Followers saat ini ${sub}`;
+                    subCatSelect.appendChild(opt);
+                });
+                subCatContainer.classList.remove("hidden");
+            } else {
+                subCatContainer.classList.add("hidden");
+            }
+            calculatePrice();
+        }
+
+        function updatePackages() {
+            const cat = document.getElementById("categorySelect").value;
+            const subCat = document.getElementById("subCatSelect").value;
+            const packageContainer = document.getElementById("packageContainer");
+            const packageSelect = document.getElementById("packageSelect");
+
+            packageSelect.innerHTML = '<option value="">-- Pilih Paket Followers --</option>';
+
+            if (cat && subCat && pricingData[cat][subCat]) {
+                const packages = pricingData[cat][subCat];
+                packages.forEach((pkg, index) => {
+                    const opt = document.createElement("option");
+                    opt.value = index;
+                    opt.textContent = pkg.label;
+                    packageSelect.appendChild(opt);
+                });
+                packageContainer.classList.remove("hidden");
+            } else {
+                packageContainer.classList.add("hidden");
+            }
+            calculatePrice();
+        }
+
+        function calculatePrice() {
+            const cat = document.getElementById("categorySelect").value;
+            const subCat = document.getElementById("subCatSelect").value;
+            const pkgIndex = document.getElementById("packageSelect").value;
+            const accountCount = parseInt(document.getElementById("accountCount").value) || 1;
+
+            const totalPriceDisplay = document.getElementById("totalPriceDisplay");
+            const priceDetailText = document.getElementById("priceDetailText");
+
+            if (cat && subCat && pkgIndex !== "" && pricingData[cat][subCat][pkgIndex]) {
+                const pkg = pricingData[cat][subCat][pkgIndex];
+                const total = pkg.price * accountCount;
+
+                totalPriceDisplay.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+                priceDetailText.textContent = `Rp ${pkg.price.toLocaleString('id-ID')} × ${accountCount} Akun`;
+            } else {
+                totalPriceDisplay.textContent = "Rp 0";
+                priceDetailText.textContent = "Silakan pilih paket";
+            }
+        }
+
+        function openModal(event) {
+            event.preventDefault();
+
+            const cat = document.getElementById("categorySelect").value;
+            const subCat = document.getElementById("subCatSelect").value;
+            const pkgIndex = document.getElementById("packageSelect").value;
+            const accountCount = parseInt(document.getElementById("accountCount").value) || 1;
+            const usernames = document.getElementById("usernamesInput").value.trim();
+
+            if (!cat || !subCat || pkgIndex === "") {
+                alert("Harap lengkapi kategori dan paket pilihanmu terlebih dahulu!");
+                return;
+            }
+
+            const catText = document.getElementById("categorySelect").options[document.getElementById("categorySelect").selectedIndex].text;
+            const pkg = pricingData[cat][subCat][pkgIndex];
+            const totalPrice = pkg.price * accountCount;
+
+            document.getElementById("summaryCat").textContent = catText;
+            document.getElementById("summaryUser").textContent = usernames;
+            document.getElementById("summarySubCat").textContent = subCat;
+            document.getElementById("summaryOrder").textContent = `${pkg.followers} (${pkg.type}) — ${accountCount} Akun`;
+            document.getElementById("summaryTotal").textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+
+            document.getElementById("summaryModal").classList.remove("hidden");
+        }
+
+        function closeModal() {
+            document.getElementById("summaryModal").classList.add("hidden");
+        }
+
+        function sendToWhatsApp() {
+            const adminWA = document.getElementById("adminWaInput").value.trim() || "6285694447348";
+            const cat = document.getElementById("categorySelect").value;
+            const subCat = document.getElementById("subCatSelect").value;
+            const pkgIndex = document.getElementById("packageSelect").value;
+            const accountCount = parseInt(document.getElementById("accountCount").value) || 1;
+            const usernames = document.getElementById("usernamesInput").value.trim();
+            const password = document.getElementById("passwordInput").value.trim();
+
+            const catText = document.getElementById("categorySelect").options[document.getElementById("categorySelect").selectedIndex].text;
+            const pkg = pricingData[cat][subCat][pkgIndex];
+            const totalPrice = pkg.price * accountCount;
+
+            // Format Pesan WhatsApp Sesuai Permintaan
+            let text = `𝗨𝗣𝗙𝗢𝗟𝗟 𝗢𝗥𝗗𝗘𝗥 𝗦𝗨𝗠𝗠𝗔𝗥𝗬\n\n`;
+            text += ` ꒰୨୧꒱ Tipe Akun: ${catText}\n`;
+            text += ` ꒰୨୧꒱ Username: ${usernames}\n`;
+            text += ` ꒰୨୧꒱ Password: ${password ? password : '(diisi hanya jika fix order)'}\n`;
+            text += ` ꒰୨୧꒱ Folls Saat Ini: ${subCat}\n`;
+            text += ` ꒰୨୧꒱ Jumlah Orderan: ${pkg.followers} (${pkg.type}) x ${accountCount} Akun\n`;
+            text += ` ꒰୨୧꒱ Total Harga: Rp ${totalPrice.toLocaleString('id-ID')}\n\n`;
+            text += `Halo, aku mau pesan ini & udah baca catatannya yaa`;
+
+            const encodedText = encodeURIComponent(text);
+            const waUrl = `https://wa.me/${adminWA}?text=${encodedText}`;
+
+            window.open(waUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
